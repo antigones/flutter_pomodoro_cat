@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:audioplayers/audio_cache.dart';
 import 'package:flutter/material.dart';
 import 'package:quiver/async.dart';
 
@@ -30,6 +31,8 @@ class _ShortPausePageState extends State<ShortPausePage> {
   String _countdownStr;
   Duration _countdown;
 
+  static AudioCache player = AudioCache();
+
   String _formatDuration(Duration duration) {
     String twoDigits(int n) {
       if (n >= 10) return "$n";
@@ -52,9 +55,8 @@ class _ShortPausePageState extends State<ShortPausePage> {
     super.initState();
   }
 
-  _checkSessionCompleted() {
-    if (_countdown.inSeconds == 0) return true;
-    return false;
+  void _playSound() {
+    player.play('goes-without-saying.mp3');
   }
 
   void _updateCountdown(CountdownTimer duration) {
@@ -90,7 +92,7 @@ class _ShortPausePageState extends State<ShortPausePage> {
       });
 
       _subShortPause.onDone(() {
-        _endPomodoro();
+        _endPomodoro(true);
       });
     } else {
       print('already started');
@@ -98,19 +100,23 @@ class _ShortPausePageState extends State<ShortPausePage> {
     }
   }
 
-  void _endPomodoro() {
+  void _endPomodoro(bool withSound) {
     print("pomocat short end!");
+    if (withSound) {
+      _playSound();
+    }
+
     _subShortPause?.cancel();
     _shortPauseTimer?.cancel();
     _shortPauseStarted = false;
   }
 
   void _stopPomodoro() {
-    _endPomodoro();
+    _endPomodoro(false);
   }
 
   void _resetPomodoro() {
-    _endPomodoro();
+    _endPomodoro(false);
     _countdown = _timeout;
     _resetCountdown();
   }
@@ -119,7 +125,7 @@ class _ShortPausePageState extends State<ShortPausePage> {
   @mustCallSuper
   void dispose() {
     print('dispose pomodoro short page');
-    _endPomodoro();
+    _endPomodoro(false);
     super.dispose();
   }
 

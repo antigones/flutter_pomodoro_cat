@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:audioplayers/audio_cache.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:quiver/async.dart';
@@ -30,6 +31,8 @@ class _PomodoroPageState extends State<PomodoroPage> {
   Duration _step = new Duration(seconds: 1);
   String _countdownStr;
   Duration _countdown;
+
+  static AudioCache player = AudioCache();
 
   String _formatDuration(Duration duration) {
     String twoDigits(int n) {
@@ -69,6 +72,10 @@ class _PomodoroPageState extends State<PomodoroPage> {
     });
   }
 
+  void _playSound() {
+    player.play('goes-without-saying.mp3');
+  }
+
   void _startPomodoro(Duration timeout) {
     if (timeout.inMilliseconds <= 0) {
       print('time to start again!');
@@ -87,26 +94,29 @@ class _PomodoroPageState extends State<PomodoroPage> {
       });
 
       _subPomodoro.onDone(() {
-        _endPomodoro();
+        _endPomodoro(true);
       });
     } else {
       print('pomocat already started!');
     }
   }
 
-  void _endPomodoro() {
+  void _endPomodoro(bool withSound) {
     print("pomocat end!");
+    if (withSound) {
+      _playSound();
+    }
     _subPomodoro?.cancel();
     _pomodoroTimer?.cancel();
     _pomodoroStarted = false;
   }
 
   void _stopPomodoro() {
-    _endPomodoro();
+    _endPomodoro(false);
   }
 
   void _resetPomodoro() {
-    _endPomodoro();
+    _endPomodoro(false);
     _countdown = _timeout;
     _resetCountdown();
   }
@@ -115,7 +125,7 @@ class _PomodoroPageState extends State<PomodoroPage> {
   @mustCallSuper
   void dispose() {
     print('dispose pomodoro page');
-    _endPomodoro();
+    _endPomodoro(false);
     super.dispose();
   }
 
@@ -146,7 +156,6 @@ class _PomodoroPageState extends State<PomodoroPage> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Expanded(width:),
                 FlatButton(
                   color: Colors.deepOrange[500],
                   textColor: Colors.white,

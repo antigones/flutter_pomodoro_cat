@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:audioplayers/audio_cache.dart';
 import 'package:flutter/material.dart';
 import 'package:quiver/async.dart';
 
@@ -30,6 +31,8 @@ class _LongPausePageState extends State<LongPausePage> {
   String _countdownStr;
   Duration _countdown;
 
+  static AudioCache player = AudioCache();
+
   String _formatDuration(Duration duration) {
     String twoDigits(int n) {
       if (n >= 10) return "$n";
@@ -52,9 +55,8 @@ class _LongPausePageState extends State<LongPausePage> {
     super.initState();
   }
 
-  _checkSessionCompleted() {
-    if (_countdown.inSeconds == 0) return true;
-    return false;
+  void _playSound() {
+    player.play('goes-without-saying.mp3');
   }
 
   void _updateCountdown(CountdownTimer duration) {
@@ -90,7 +92,7 @@ class _LongPausePageState extends State<LongPausePage> {
       });
 
       _subLongPause.onDone(() {
-        _endPomodoro();
+        _endPomodoro(true);
       });
     } else {
       print('already started');
@@ -98,19 +100,23 @@ class _LongPausePageState extends State<LongPausePage> {
     }
   }
 
-  void _endPomodoro() {
+  void _endPomodoro(bool withSound) {
     print("pomocat long end!");
+    if (withSound) {
+      _playSound();
+    }
+
     _subLongPause?.cancel();
     _longPauseTimer?.cancel();
     _longPauseStarted = false;
   }
 
   void _stopPomodoro() {
-    _endPomodoro();
+    _endPomodoro(false);
   }
 
   void _resetPomodoro() {
-    _endPomodoro();
+    _endPomodoro(false);
     _countdown = _timeout;
     _resetCountdown();
   }
@@ -119,7 +125,7 @@ class _LongPausePageState extends State<LongPausePage> {
   @mustCallSuper
   void dispose() {
     print('dispose pomodoro long page');
-    _endPomodoro();
+    _endPomodoro(false);
     super.dispose();
   }
 
