@@ -146,6 +146,7 @@ class _PomodoroPageState extends State<PomodoroPage> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
+                Expanded(width:),
                 FlatButton(
                   color: Colors.deepOrange[500],
                   textColor: Colors.white,

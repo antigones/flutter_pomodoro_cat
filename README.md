@@ -1,16 +1,10 @@
-# flutterpomodorocat
+# Pomodoro Cat!
 
-A Flutter application about cats, work and procrastination
+Pomodoro Cat is a small Flutter pomodoro app with a pomodoro cat.
 
-## Getting Started
+You can try it here:
+[Pomodor Cat](https://antigones.github.io/flutter_pomodoro_cat_web/index.html)
 
-This project is a starting point for a Flutter application.
+# Screenshots
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![Main page](https://antigones.github.io/flutter_pomodoro_cat_web/screenshots/pomodoro.png)
