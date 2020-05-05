@@ -83,6 +83,7 @@ class _ShortPausePageState extends State<ShortPausePage> {
       _shortPauseStarted = true;
       print('pomocat short start!');
       _shortPauseTimer = new CountdownTimer(timeout, _step);
+      _updateCountdown(_shortPauseTimer);
       _subShortPause = _shortPauseTimer.listen(null);
       _subShortPause.onData((duration) {
         _updateCountdown(duration);

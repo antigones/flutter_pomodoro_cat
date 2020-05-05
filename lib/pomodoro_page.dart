@@ -56,6 +56,7 @@ class _PomodoroPageState extends State<PomodoroPage> {
   void _updateCountdown(CountdownTimer countdownTimer) {
     setState(() {
       // Make it start from the timeout value
+
       _countdownStr = _formatDuration(countdownTimer.remaining);
       _countdown = countdownTimer.remaining;
     });
@@ -76,10 +77,10 @@ class _PomodoroPageState extends State<PomodoroPage> {
     }
 
     if (!_pomodoroStarted) {
-      _pomodoroStarted = true;
-
       print('pomocat start!');
+      _pomodoroStarted = true;
       _pomodoroTimer = new CountdownTimer(timeout, _step);
+      _updateCountdown(_pomodoroTimer);
       _subPomodoro = _pomodoroTimer.listen(null);
       _subPomodoro.onData((duration) {
         _updateCountdown(duration);

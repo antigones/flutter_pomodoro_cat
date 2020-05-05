@@ -83,6 +83,7 @@ class _LongPausePageState extends State<LongPausePage> {
       _longPauseStarted = true;
       print('pomocat long start!');
       _longPauseTimer = new CountdownTimer(timeout, _step);
+      _updateCountdown(_longPauseTimer);
       _subLongPause = _longPauseTimer.listen(null);
       _subLongPause.onData((duration) {
         _updateCountdown(duration);
