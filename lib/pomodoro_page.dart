@@ -1,9 +1,6 @@
-import 'dart:async';
-
-import 'package:audioplayers/audio_cache.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:quiver/async.dart';
+import 'package:flutterpomodorocat/pomodoro_widget.dart';
 
 class PomodoroPage extends StatefulWidget {
   PomodoroPage({Key key, this.title}) : super(key: key);
@@ -24,110 +21,7 @@ class PomodoroPage extends StatefulWidget {
 }
 
 class _PomodoroPageState extends State<PomodoroPage> {
-  CountdownTimer _pomodoroTimer;
-  StreamSubscription<CountdownTimer> _subPomodoro;
-  bool _pomodoroStarted;
-  Duration _timeout = new Duration(minutes: 25);
-  Duration _step = new Duration(seconds: 1);
-  String _countdownStr;
-  Duration _countdown;
-
-  static AudioCache player = AudioCache();
-
-  String _formatDuration(Duration duration) {
-    String twoDigits(int n) {
-      if (n >= 10) return "$n";
-      return "0$n";
-    }
-
-    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
-    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
-    return "$twoDigitMinutes:$twoDigitSeconds";
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    print('initState pomodoroPage');
-    _countdownStr = _formatDuration(_timeout);
-    _countdown = _timeout;
-    _pomodoroStarted = false;
-
-    super.initState();
-  }
-
-  void _updateCountdown(CountdownTimer countdownTimer) {
-    setState(() {
-      // Make it start from the timeout value
-
-      _countdownStr = _formatDuration(countdownTimer.remaining);
-      _countdown = countdownTimer.remaining;
-    });
-  }
-
-  void _resetCountdown() {
-    setState(() {
-      // Make it start from the timeout value
-      _countdownStr = _formatDuration(_timeout);
-    });
-  }
-
-  void _playSound() {
-    player.play('goes-without-saying.mp3');
-  }
-
-  void _startPomodoro(Duration timeout) {
-    if (timeout.inMilliseconds <= 0) {
-      print('time to start again!');
-      _resetPomodoro();
-      timeout = _timeout;
-    }
-
-    if (!_pomodoroStarted) {
-      print('pomocat start!');
-      _pomodoroStarted = true;
-      _pomodoroTimer = new CountdownTimer(timeout, _step);
-      _updateCountdown(_pomodoroTimer);
-      _subPomodoro = _pomodoroTimer.listen(null);
-      _subPomodoro.onData((duration) {
-        _updateCountdown(duration);
-      });
-
-      _subPomodoro.onDone(() {
-        _endPomodoro(true);
-      });
-    } else {
-      print('pomocat already started!');
-    }
-  }
-
-  void _endPomodoro(bool withSound) {
-    print("pomocat end!");
-    if (withSound) {
-      _playSound();
-    }
-    _subPomodoro?.cancel();
-    _pomodoroTimer?.cancel();
-    _pomodoroStarted = false;
-  }
-
-  void _stopPomodoro() {
-    _endPomodoro(false);
-  }
-
-  void _resetPomodoro() {
-    _endPomodoro(false);
-    _countdown = _timeout;
-    _resetCountdown();
-  }
-
-  @protected
-  @mustCallSuper
-  void dispose() {
-    print('dispose pomodoro page');
-    _endPomodoro(false);
-    super.dispose();
-  }
+  Duration _timeout = new Duration(seconds: 25);
 
   @override
   Widget build(BuildContext context) {
@@ -150,59 +44,7 @@ class _PomodoroPageState extends State<PomodoroPage> {
                 child: Image.asset('assets/cat-work.png'),
               ),
             ),
-            Text('$_countdownStr',
-                style: TextStyle(fontSize: 40.0, fontFamily: 'Pacifico')),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                FlatButton(
-                  color: Colors.deepOrange[500],
-                  textColor: Colors.white,
-                  disabledColor: Colors.grey,
-                  disabledTextColor: Colors.black,
-                  padding: EdgeInsets.all(8.0),
-                  splashColor: Colors.deepOrangeAccent,
-                  onPressed: () {
-                    _startPomodoro(_countdown);
-                  },
-                  child: Text(
-                    'Start',
-                    style: TextStyle(fontSize: 20.0, fontFamily: 'Pacifico'),
-                  ),
-                ),
-                FlatButton(
-                  color: Colors.deepOrange[500],
-                  textColor: Colors.white,
-                  disabledColor: Colors.grey,
-                  disabledTextColor: Colors.black,
-                  padding: EdgeInsets.all(8.0),
-                  splashColor: Colors.deepOrangeAccent,
-                  onPressed: () {
-                    _stopPomodoro();
-                  },
-                  child: Text(
-                    'Stop',
-                    style: TextStyle(fontSize: 20.0, fontFamily: 'Pacifico'),
-                  ),
-                ),
-                FlatButton(
-                  color: Colors.deepOrange[500],
-                  textColor: Colors.white,
-                  disabledColor: Colors.grey,
-                  disabledTextColor: Colors.black,
-                  padding: EdgeInsets.all(8.0),
-                  splashColor: Colors.deepOrangeAccent,
-                  onPressed: () {
-                    _resetPomodoro();
-                  },
-                  child: Text(
-                    'Reset',
-                    style: TextStyle(fontSize: 20.0, fontFamily: 'Pacifico'),
-                  ),
-                ),
-              ],
-            ),
+            PomodoroWidget(duration: _timeout),
             SizedBox(height: 25)
           ],
         ),
