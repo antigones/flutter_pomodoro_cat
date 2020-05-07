@@ -21,7 +21,7 @@ class PomodoroPage extends StatefulWidget {
 }
 
 class _PomodoroPageState extends State<PomodoroPage> {
-  Duration _timeout = new Duration(seconds: 25);
+  Duration _timeout = new Duration(minutes: 25);
 
   @override
   Widget build(BuildContext context) {

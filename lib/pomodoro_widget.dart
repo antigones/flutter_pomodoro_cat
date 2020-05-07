@@ -25,7 +25,7 @@ class _PomodoroWidgetState extends State<PomodoroWidget> {
 
   static AudioCache player = AudioCache();
 
-  String _formatDuration(Duration duration) {
+  /* String _formatDuration(Duration duration) {
     String twoDigits(int n) {
       if (n >= 10) return "$n";
       return "0$n";
@@ -35,12 +35,26 @@ class _PomodoroWidgetState extends State<PomodoroWidget> {
     String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
     return "$twoDigitMinutes:$twoDigitSeconds";
   }
+  */
+
+  void _formatDuration(Duration duration) {
+    String twoDigits(int n) {
+      if (n >= 10) return "$n";
+      return "0$n";
+    }
+
+    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
+    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
+    setState(() {
+      _countdownStr = "$twoDigitMinutes:$twoDigitSeconds";
+    });
+  }
 
   @override
   void initState() {
     print('initState pomodoroPage');
     _timeout = widget.duration;
-    _countdownStr = _formatDuration(_timeout);
+    _formatDuration(_timeout);
     _countdown = _timeout;
     _pomodoroStarted = false;
 
@@ -48,19 +62,12 @@ class _PomodoroWidgetState extends State<PomodoroWidget> {
   }
 
   void _updateCountdown(CountdownTimer countdownTimer) {
-    setState(() {
-      // Make it start from the timeout value
-
-      _countdownStr = _formatDuration(countdownTimer.remaining);
-      _countdown = countdownTimer.remaining;
-    });
+    _formatDuration(countdownTimer.remaining);
+    _countdown = countdownTimer.remaining;
   }
 
   void _resetCountdown() {
-    setState(() {
-      // Make it start from the timeout value
-      _countdownStr = _formatDuration(_timeout);
-    });
+    _formatDuration(_timeout);
   }
 
   void _playSound() {
