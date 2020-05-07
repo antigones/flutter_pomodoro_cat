@@ -48,19 +48,24 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  static List<Widget> _widgets = <Widget>[
-    PomodoroPage(),
-    ShortPausePage(),
-    LongPausePage(),
-    AboutPage()
-  ];
+  final controller = PageController(initialPage: _selectedIndex);
 
-  int _selectedIndex = 0;
+  static int _selectedIndex = 0;
 
-  void _onItemTapped(int index) {
+  void _updateIndex(index) {
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  void _onItemTapped(int index) {
+    _updateIndex(index);
+    controller.animateToPage(index,
+        duration: Duration(milliseconds: 500), curve: Curves.ease);
+  }
+
+  void _goToPage(int index) {
+    _updateIndex(index);
   }
 
   @override
@@ -79,7 +84,18 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
         backgroundColor: Colors.deepOrange[500],
       ),
-      body: _widgets[_selectedIndex],
+      body: PageView(
+        controller: controller,
+        onPageChanged: (index) {
+          _goToPage(index);
+        },
+        children: <Widget>[
+          PomodoroPage(),
+          ShortPausePage(),
+          LongPausePage(),
+          AboutPage()
+        ],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -102,7 +118,7 @@ class _MyHomePageState extends State<MyHomePage> {
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.deepOrange[500],
         unselectedItemColor: Colors.grey,
-        //backgroundColor: Colors.grey[200],ù
+        //backgroundColor: Colors.grey[200]
         showUnselectedLabels: true,
         unselectedLabelStyle: TextStyle(color: Colors.grey),
         onTap: _onItemTapped,
