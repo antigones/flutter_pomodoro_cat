@@ -33,19 +33,20 @@ class _ShortPausePageState extends State<ShortPausePage> {
 
     return SafeArea(
       child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            SizedBox(height: 25),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Image.asset('assets/cat-relax.png'),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 25),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Image.asset('assets/cat-relax.png'),
+                ),
               ),
-            ),
-            PomodoroWidget(duration: _timeout),
-            SizedBox(height: 25)
-          ],
+              PomodoroWidget(duration: _timeout),
+            ],
+          ),
         ),
       ),
     );

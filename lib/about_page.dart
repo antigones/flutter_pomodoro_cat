@@ -31,33 +31,34 @@ class _AboutPageState extends State<AboutPage> {
 
     return SafeArea(
       child: Center(
-        child: Column(
-          children: <Widget>[
-            SizedBox(height: 25),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Image.asset('assets/cat-relax-about.png'),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 25),
+          child: Column(
+            children: <Widget>[
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Image.asset('assets/cat-relax-about.png'),
+                ),
               ),
-            ),
-            Text(
-              'Pomodoro Cat!',
-              style: TextStyle(fontSize: 30.0, fontFamily: 'Pacifico'),
-            ),
-            Text(
-              'A pomodoro app by Juna Salviati',
-              style: TextStyle(fontSize: 18.0, fontFamily: 'Arimo'),
-            ),
-            Text(
-              'Made with <3 with Flutter',
-              style: TextStyle(fontSize: 18.0, fontFamily: 'Arimo'),
-            ),
-            Text(
-              'Ginger Cat by https://icons8.com',
-              style: TextStyle(fontSize: 18.0, fontFamily: 'Arimo'),
-            ),
-            SizedBox(height: 25),
-          ],
+              Text(
+                'Pomodoro Cat!',
+                style: TextStyle(fontSize: 30.0, fontFamily: 'Pacifico'),
+              ),
+              Text(
+                'A pomodoro app by Juna Salviati',
+                style: TextStyle(fontSize: 18.0, fontFamily: 'Arimo'),
+              ),
+              Text(
+                'Made with <3 with Flutter',
+                style: TextStyle(fontSize: 18.0, fontFamily: 'Arimo'),
+              ),
+              Text(
+                'Ginger Cat by https://icons8.com',
+                style: TextStyle(fontSize: 18.0, fontFamily: 'Arimo'),
+              ),
+            ],
+          ),
         ),
       ),
     );

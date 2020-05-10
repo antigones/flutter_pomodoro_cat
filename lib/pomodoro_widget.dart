@@ -19,32 +19,17 @@ class _PomodoroWidgetState extends State<PomodoroWidget> {
   StreamSubscription<CountdownTimer> _subPomodoro;
   bool _pomodoroStarted;
   Duration _timeout;
-  Duration _step = new Duration(seconds: 1);
+  Duration _step = Duration(seconds: 1);
   String _countdownStr;
   Duration _countdown;
 
   static AudioCache player = AudioCache();
 
-  /* String _formatDuration(Duration duration) {
-    String twoDigits(int n) {
-      if (n >= 10) return "$n";
-      return "0$n";
-    }
-
-    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
-    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
-    return "$twoDigitMinutes:$twoDigitSeconds";
-  }
-  */
-
   void _formatDuration(Duration duration) {
-    String twoDigits(int n) {
-      if (n >= 10) return "$n";
-      return "0$n";
-    }
-
-    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
-    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
+    String twoDigitMinutes =
+        duration.inMinutes.remainder(60).toString().padLeft(2, '0');
+    String twoDigitSeconds =
+        duration.inSeconds.remainder(60).toString().padLeft(2, '0');
     setState(() {
       _countdownStr = "$twoDigitMinutes:$twoDigitSeconds";
     });
@@ -84,7 +69,7 @@ class _PomodoroWidgetState extends State<PomodoroWidget> {
     if (!_pomodoroStarted) {
       print('pomocat start!');
       _pomodoroStarted = true;
-      _pomodoroTimer = new CountdownTimer(timeout, _step);
+      _pomodoroTimer = CountdownTimer(timeout, _step);
       _updateCountdown(_pomodoroTimer);
       _subPomodoro = _pomodoroTimer.listen(null);
       _subPomodoro.onData((duration) {
