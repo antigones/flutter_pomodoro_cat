@@ -14,7 +14,7 @@ class PomodoroWidget extends StatefulWidget {
   _PomodoroWidgetState createState() => _PomodoroWidgetState();
 }
 
-class _PomodoroWidgetState extends State<PomodoroWidget> {
+class _PomodoroWidgetState extends State<PomodoroWidget> with SingleTickerProviderStateMixin {
   CountdownTimer _pomodoroTimer;
   StreamSubscription<CountdownTimer> _subPomodoro;
   bool _pomodoroStarted;
