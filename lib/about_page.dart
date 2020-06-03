@@ -50,7 +50,7 @@ class _AboutPageState extends State<AboutPage> {
                 style: TextStyle(fontSize: 18.0, fontFamily: 'Arimo'),
               ),
               Text(
-                'Made with <3 with Flutter',
+                'Made with ❤ with Flutter',
                 style: TextStyle(fontSize: 18.0, fontFamily: 'Arimo'),
               ),
               Text(

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:audioplayers/audio_cache.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:quiver/async.dart';
 
@@ -14,13 +15,15 @@ class PomodoroWidget extends StatefulWidget {
   _PomodoroWidgetState createState() => _PomodoroWidgetState();
 }
 
-class _PomodoroWidgetState extends State<PomodoroWidget> with SingleTickerProviderStateMixin {
+class _PomodoroWidgetState extends State<PomodoroWidget>
+    with SingleTickerProviderStateMixin {
   CountdownTimer _pomodoroTimer;
   StreamSubscription<CountdownTimer> _subPomodoro;
   bool _pomodoroStarted;
   Duration _timeout;
   Duration _step = Duration(seconds: 1);
   String _countdownStr;
+  ValueNotifier<String> _vnCountdownStr = ValueNotifier<String>('');
   Duration _countdown;
 
   static AudioCache player = AudioCache();
@@ -30,14 +33,15 @@ class _PomodoroWidgetState extends State<PomodoroWidget> with SingleTickerProvid
         duration.inMinutes.remainder(60).toString().padLeft(2, '0');
     String twoDigitSeconds =
         duration.inSeconds.remainder(60).toString().padLeft(2, '0');
-    setState(() {
-      _countdownStr = "$twoDigitMinutes:$twoDigitSeconds";
-    });
+    //setState(() {
+    _countdownStr = "$twoDigitMinutes:$twoDigitSeconds";
+    _vnCountdownStr.value = _countdownStr;
+    //});
   }
 
   @override
   void initState() {
-    print('initState pomodoroPage');
+    //print('initState pomodoroPage');
     _timeout = widget.duration;
     _formatDuration(_timeout);
     _countdown = _timeout;
@@ -61,13 +65,13 @@ class _PomodoroWidgetState extends State<PomodoroWidget> with SingleTickerProvid
 
   void _startPomodoro(Duration timeout) {
     if (timeout.inMilliseconds <= 0) {
-      print('time to start again!');
+      //print('time to start again!');
       _resetPomodoro();
       timeout = _timeout;
     }
 
     if (!_pomodoroStarted) {
-      print('pomocat start!');
+      //print('pomocat start!');
       _pomodoroStarted = true;
       _pomodoroTimer = CountdownTimer(timeout, _step);
       _updateCountdown(_pomodoroTimer);
@@ -80,12 +84,12 @@ class _PomodoroWidgetState extends State<PomodoroWidget> with SingleTickerProvid
         _endPomodoro(true);
       });
     } else {
-      print('pomocat already started!');
+      //print('pomocat already started!');
     }
   }
 
   void _endPomodoro(bool withSound) {
-    print("pomocat end!");
+    //print("pomocat end!");
     if (withSound) {
       _playSound();
     }
@@ -99,6 +103,7 @@ class _PomodoroWidgetState extends State<PomodoroWidget> with SingleTickerProvid
   }
 
   void _resetPomodoro() {
+    //print("pomocat reset!");
     _endPomodoro(false);
     _countdown = _timeout;
     _resetCountdown();
@@ -107,7 +112,7 @@ class _PomodoroWidgetState extends State<PomodoroWidget> with SingleTickerProvid
   @protected
   @mustCallSuper
   void dispose() {
-    print('dispose pomodoro page');
+    //print('dispose pomodoro page');
     _endPomodoro(false);
     super.dispose();
   }
@@ -124,8 +129,12 @@ class _PomodoroWidgetState extends State<PomodoroWidget> with SingleTickerProvid
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Text('$_countdownStr',
-            style: TextStyle(fontSize: 40.0, fontFamily: 'Pacifico')),
+        ValueListenableBuilder<String>(
+            valueListenable: _vnCountdownStr,
+            builder: (context, value, _) {
+              return Text('$value',
+                  style: TextStyle(fontSize: 40.0, fontFamily: 'Pacifico'));
+            }),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
